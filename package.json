@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"license": "MIT",
 	"bin": {
-		"tree-cli": "dist/cli.js"
+		"knu-tree-cli": "dist/cli.js"
 	},
 	"type": "module",
 	"engines": {
