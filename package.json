@@ -1,5 +1,5 @@
 {
-	"name": "tree-cli",
+	"name": "@knu9910/tree-cli",
 	"version": "0.0.1",
 	"license": "MIT",
 	"bin": {
