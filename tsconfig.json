@@ -3,5 +3,6 @@
 	"compilerOptions": {
 		"outDir": "dist"
 	},
-	"include": ["source", "templates"]
+	"include": ["source"],
+	"exclude": ["templates"]
 }
