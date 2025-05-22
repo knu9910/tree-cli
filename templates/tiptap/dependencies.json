@@ -1,1 +1,4 @@
-["react", "clsx", "class-variance-authority", "zustand", "tiptap"]
+{
+	"packages": ["react", "clsx"],
+	"components": ["select"]
+}

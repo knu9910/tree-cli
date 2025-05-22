@@ -27,9 +27,14 @@ export async function addComponent(name: string) {
 
 	const depsPath = path.join(templatePath, 'dependencies.json');
 	if (fs.existsSync(depsPath)) {
-		const deps = await fs.readJson(depsPath);
-		if (Array.isArray(deps) && deps.length > 0) {
-			await installDeps(deps);
+		const depsJson = await fs.readJson(depsPath);
+		if (Array.isArray(depsJson.packages) && depsJson.packages.length > 0) {
+			await installDeps(depsJson.packages);
+		}
+		if (Array.isArray(depsJson.components) && depsJson.components.length > 0) {
+			for (const depComp of depsJson.components) {
+				await addComponent(depComp);
+			}
 		}
 	}
 }
