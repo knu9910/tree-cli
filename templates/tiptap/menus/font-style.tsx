@@ -1,25 +1,23 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select/select';
 import { FontOptions } from '../plugin/tiptap-font-config/constants';
-import { useEditorContext } from '../context/editor-context';
 import { cn } from '@/lib/utils';
 import { Type } from 'lucide-react';
 import { IconButtonWrapper } from './common/icon-button-wrapper';
 import { IconButton } from './common/icon-button';
+import { Editor } from '@tiptap/react';
 
-type Props = React.HTMLAttributes<HTMLElement>;
+type Props = React.HTMLAttributes<HTMLElement> & {
+  editor: Editor;
+};
 
-export const TipTapFontStyle = ({ className }: Readonly<Props>) => {
-  const editor = useEditorContext();
-
-  if (!editor) return null;
-
+export const TipTapFontStyle = ({ className, editor }: Readonly<Props>) => {
   const changeFont = (font: string) => {
     // 폰트 변경 적용
     editor.chain().setFontFamily(FontOptions[font]).run();
   };
 
   return (
-    <>
+    <div className={cn('', className)}>
       {/* 폰트 설정 메뉴 */}
       <Select onValueChange={changeFont}>
         <SelectTrigger
@@ -47,6 +45,6 @@ export const TipTapFontStyle = ({ className }: Readonly<Props>) => {
           ))}
         </SelectContent>
       </Select>
-    </>
+    </div>
   );
 };

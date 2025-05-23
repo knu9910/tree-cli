@@ -1,14 +1,15 @@
-import { useEditorContext } from '../context/editor-context';
 import { cn } from '@/lib/utils';
 import { Strikethrough } from 'lucide-react';
 import { IconButtonWrapper } from './common/icon-button-wrapper';
 import { IconButton } from './common/icon-button';
 import { useIsActive } from '../plugin/use-active';
+import { Editor } from '@tiptap/react';
 
-type Props = React.HTMLAttributes<HTMLElement>;
+type Props = React.HTMLAttributes<HTMLElement> & {
+  editor: Editor;
+};
 
-export const Strike = ({ className }: Readonly<Props>) => {
-  const editor = useEditorContext();
+export const Strike = ({ className, editor }: Readonly<Props>) => {
   const isActive = useIsActive(editor, 'strike');
 
   if (!editor) return null;

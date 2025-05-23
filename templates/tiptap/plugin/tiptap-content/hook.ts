@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import cuid from 'cuid';
 
 type TiptapContentStore = {
   contents: { [key: string]: string };
@@ -9,7 +8,6 @@ type TiptapContentStore = {
   saveTempContent: (key: string, content: string) => void;
   getLocalContent: (key: string) => void;
   removeContent: (key: string) => void;
-  getTiptapKey: () => string;
 };
 
 export const useContentStore = create<TiptapContentStore>((set, get) => ({
@@ -43,11 +41,4 @@ export const useContentStore = create<TiptapContentStore>((set, get) => ({
       delete newTempContents[key];
       return { contents: newContents, tempContents: newTempContents };
     }),
-  getTiptapKey: () => {
-    const key = cuid();
-    set((state) => ({
-      contents: { ...state.contents, [key]: '' },
-    }));
-    return key;
-  },
 }));

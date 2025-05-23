@@ -1,4 +1,3 @@
-import { useEditorContext } from '../context/editor-context';
 import { useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
@@ -7,11 +6,13 @@ import { cn } from '@/lib/utils';
 import { Link } from 'lucide-react';
 import { IconButton } from './common/icon-button';
 import { IconButtonWrapper } from './common/icon-button-wrapper';
+import { Editor } from '@tiptap/react';
 
-type Props = React.HTMLAttributes<HTMLElement>;
+type Props = React.HTMLAttributes<HTMLElement> & {
+  editor: Editor;
+};
 
-export const UrlLink = ({ className }: Readonly<Props>) => {
-  const editor = useEditorContext();
+export const UrlLink = ({ className, editor }: Readonly<Props>) => {
   const [link, setLink] = useState<string>('');
   const [open, setOpen] = useState(false);
 

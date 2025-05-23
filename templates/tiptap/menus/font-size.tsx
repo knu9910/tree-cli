@@ -1,18 +1,16 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select/select';
 import { Pxs } from '../plugin/tiptap-font-config/constants';
-import { useEditorContext } from '../context/editor-context';
 import { cn } from '@/lib/utils';
 import { TextCursorInput } from 'lucide-react';
 import { IconButtonWrapper } from './common/icon-button-wrapper';
 import { IconButton } from './common/icon-button';
+import { Editor } from '@tiptap/react';
 
-type Props = React.HTMLAttributes<HTMLElement>;
+type Props = React.HTMLAttributes<HTMLElement> & {
+  editor: Editor;
+};
 
-export const TipTapFontSize = ({ className }: Readonly<Props>) => {
-  const editor = useEditorContext();
-
-  if (!editor) return null;
-
+export const TipTapFontSize = ({ className, editor }: Readonly<Props>) => {
   const changeFontSize = (size: Pxs) => {
     editor.chain().setFontSize(size).run();
   };
@@ -22,7 +20,7 @@ export const TipTapFontSize = ({ className }: Readonly<Props>) => {
   };
 
   return (
-    <>
+    <div className={cn('', className)}>
       {/* 폰트 크기 설정 메뉴 */}
       <Select onValueChange={changeFontSize}>
         <SelectTrigger
@@ -50,6 +48,6 @@ export const TipTapFontSize = ({ className }: Readonly<Props>) => {
           ))}
         </SelectContent>
       </Select>
-    </>
+    </div>
   );
 };

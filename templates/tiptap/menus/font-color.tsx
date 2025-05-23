@@ -1,16 +1,17 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useEditorContext } from '../context/editor-context';
 import { useFontConfigStore } from '../plugin';
 import { Colors } from '../plugin/tiptap-font-config/constants';
 import { cn } from '@/lib/utils';
 import { Pipette } from 'lucide-react';
 import { IconButtonWrapper } from './common/icon-button-wrapper';
 import { IconButton } from './common/icon-button';
+import { Editor } from '@tiptap/react';
 
-type Props = React.HTMLAttributes<HTMLElement>;
+type Props = React.HTMLAttributes<HTMLElement> & {
+  editor: Editor;
+};
 
-export const TipTapFontColor = ({ className }: Readonly<Props>) => {
-  const editor = useEditorContext();
+export const TipTapFontColor = ({ className, editor }: Readonly<Props>) => {
   const { setSelectedColor, selectedColor } = useFontConfigStore();
 
   if (!editor) return null;
@@ -27,7 +28,7 @@ export const TipTapFontColor = ({ className }: Readonly<Props>) => {
   };
 
   return (
-    <>
+    <div className={cn('', className)}>
       {/* 색상 선택 */}
       <Popover>
         <PopoverTrigger asChild>
@@ -48,6 +49,6 @@ export const TipTapFontColor = ({ className }: Readonly<Props>) => {
           ))}
         </PopoverContent>
       </Popover>
-    </>
+    </div>
   );
 };

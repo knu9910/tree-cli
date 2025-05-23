@@ -1,4 +1,3 @@
-import { useEditorContext } from '../context/editor-context';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Colors } from '../plugin/tiptap-font-config/constants';
 import { cn } from '@/lib/utils';
@@ -6,11 +5,13 @@ import { Highlighter } from 'lucide-react';
 import { IconButtonWrapper } from './common/icon-button-wrapper';
 import { IconButton } from './common/icon-button';
 import { useState } from 'react';
+import { Editor } from '@tiptap/react';
 
-type Props = React.HTMLAttributes<HTMLElement>;
+type Props = React.HTMLAttributes<HTMLElement> & {
+  editor: Editor;
+};
 
-export const Highlight = ({ className }: Readonly<Props>) => {
-  const editor = useEditorContext();
+export const Highlight = ({ className, editor }: Readonly<Props>) => {
   const [selectedColor, setSelectedColor] = useState<string>('');
 
   if (!editor) return null;

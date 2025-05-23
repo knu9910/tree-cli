@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { useEditorContext } from '../context/editor-context';
 import { Table as TableIcon } from 'lucide-react';
 import { IconButtonWrapper } from './common/icon-button-wrapper';
 import { IconButton } from './common/icon-button';
+import { Editor } from '@tiptap/react';
 
 const MAX_ROWS = 8;
 const MAX_COLS = 12;
 
-type Props = React.HTMLAttributes<HTMLElement>;
+type Props = React.HTMLAttributes<HTMLElement> & {
+  editor: Editor;
+};
 
-export const Table = ({ className }: Readonly<Props>) => {
-  const editor = useEditorContext();
+export const Table = ({ className, editor }: Readonly<Props>) => {
   const [showGrid, setShowGrid] = useState(false);
   const [hovered, setHovered] = useState<[number, number]>([0, 0]);
 

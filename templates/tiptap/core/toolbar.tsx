@@ -15,27 +15,33 @@ import { TextAlignCenter } from '../menus/text-align-center';
 import { TextAlignRight } from '../menus/text-align-right';
 import { Img } from '../menus/img';
 import { Table } from '../menus/table';
-export const Toolbar = ({ className }: { className?: string }) => (
+import { Editor } from '@tiptap/core';
+
+type Props = React.HTMLAttributes<HTMLElement> & {
+  editor: Editor;
+};
+
+export const Toolbar = ({ className, editor }: Readonly<Props>) => (
   <div className={cn('flex items-center py-1 px-4 border-b', className)}>
-    <TipTapFontStyle />
+    <TipTapFontStyle editor={editor} />
     <Separator />
-    <TipTapFontSize />
+    <TipTapFontSize editor={editor} />
     <Separator />
-    <TipTapFontColor />
-    <Highlight />
+    <TipTapFontColor editor={editor} />
+    <Highlight editor={editor} />
     <Separator />
-    <Bold />
-    <Italic />
-    <UnderLine />
-    <Strike />
-    <UrlLink />
+    <Bold editor={editor} />
+    <Italic editor={editor} />
+    <UnderLine editor={editor} />
+    <Strike editor={editor} />
+    <UrlLink editor={editor} />
     <Separator />
-    <Table />
+    <Table editor={editor} />
     <Separator />
-    <TextAlignLeft />
-    <TextAlignCenter />
-    <TextAlignRight />
+    <TextAlignLeft editor={editor} />
+    <TextAlignCenter editor={editor} />
+    <TextAlignRight editor={editor} />
     <Separator />
-    <Img />
+    <Img editor={editor} />
   </div>
 );

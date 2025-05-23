@@ -1,15 +1,15 @@
-import { useEditorContext } from '../context/editor-context';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { ImagePlus } from 'lucide-react';
 import { IconButton } from './common/icon-button';
 import { IconButtonWrapper } from './common/icon-button-wrapper';
+import { Editor } from '@tiptap/react';
 
-type Props = React.HTMLAttributes<HTMLElement>;
+type Props = React.HTMLAttributes<HTMLElement> & {
+  editor: Editor;
+};
 
-export const Img = ({ className }: Readonly<Props>) => {
-  const editor = useEditorContext();
-
+export const Img = ({ className, editor }: Readonly<Props>) => {
   if (!editor) return null;
 
   const insertLocalImage = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,14 +1,15 @@
-import { useEditorContext } from '../context/editor-context';
 import { cn } from '@/lib/utils';
 import { ItalicIcon } from 'lucide-react';
 import { IconButtonWrapper } from './common/icon-button-wrapper';
 import { IconButton } from './common/icon-button';
 import { useIsActive } from '../plugin/use-active';
+import { Editor } from '@tiptap/react';
 
-type Props = React.HTMLAttributes<HTMLElement>;
+type Props = React.HTMLAttributes<HTMLElement> & {
+  editor: Editor;
+};
 
-export const Italic = ({ className }: Readonly<Props>) => {
-  const editor = useEditorContext();
+export const Italic = ({ className, editor }: Readonly<Props>) => {
   const isActive = useIsActive(editor, 'italic');
   const toggleItalic = () => editor.chain().toggleItalic().run();
 

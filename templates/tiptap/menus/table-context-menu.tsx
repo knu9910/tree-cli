@@ -1,25 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { useEditorContext } from '../context/editor-context';
+import { Editor } from '@tiptap/react';
 import { CellSelection } from '@tiptap/pm/tables';
 
-type Props = React.HTMLAttributes<HTMLElement>;
+type Props = React.HTMLAttributes<HTMLElement> & {
+  editor: Editor;
+};
 
-export const TableContextMenu = ({ className }: Readonly<Props>) => {
+export const TableContextMenu = ({ className, editor }: Readonly<Props>) => {
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   const [lastCellSelection, setLastCellSelection] = useState<any>(null);
-  const editor = useEditorContext();
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!editor) return;
+    const dom = editor.view.dom;
     const handleContextMenu = (event: MouseEvent) => {
+      if (!dom.contains(event.target as Node)) return; // 자기 editor 영역만 반응
       const target = event.target as HTMLElement;
       if (target.closest('td, th')) {
         event.preventDefault();
         // 현재 selection이 CellSelection이면 저장
         const sel = editor?.state?.selection;
         if (sel && sel instanceof CellSelection) {
-          // instanceof CellSelection를 빼면 열을 병합할때 문제가 생김
           setLastCellSelection(sel);
         }
         setMenu({ x: event.clientX, y: event.clientY });
@@ -30,12 +33,11 @@ export const TableContextMenu = ({ className }: Readonly<Props>) => {
     const handleClick = () => {
       if (menu) setMenu(null);
     };
-    const preventWheel = (e: WheelEvent) => e.preventDefault();
-    document.addEventListener('contextmenu', handleContextMenu);
-    document.addEventListener('click', handleClick);
+    dom.addEventListener('contextmenu', handleContextMenu);
+    window.addEventListener('click', handleClick);
     return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
-      document.removeEventListener('click', handleClick);
+      dom.removeEventListener('contextmenu', handleContextMenu);
+      window.removeEventListener('click', handleClick);
     };
   }, [menu, editor]);
 
@@ -48,16 +50,21 @@ export const TableContextMenu = ({ className }: Readonly<Props>) => {
     };
   }, [menu]);
 
-  const restoreSelection = () => {
-    if (lastCellSelection && editor) {
-      editor.view.dispatch(editor.state.tr.setSelection(lastCellSelection));
-    }
-  };
-
   // 공통 핸들러 함수
   const handleMenuAction = (command: () => void) => {
-    restoreSelection();
-    command();
+    if (lastCellSelection && editor) {
+      try {
+        editor.view.dispatch(editor.state.tr.setSelection(lastCellSelection));
+        command();
+      } catch (e) {
+        // selection이 유효하지 않으면 그냥 focus만 하고 명령 실행
+        editor.chain().focus().run();
+        command();
+      }
+    } else {
+      editor.chain().focus().run();
+      command();
+    }
     setMenu(null);
   };
 
