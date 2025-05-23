@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import {fileURLToPath} from 'url';
 import {installDeps} from './install-daps.js';
+import {initializeRequiredFiles} from './initalize-required-files.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -14,7 +15,7 @@ export async function addComponent(name: string) {
 
 	console.log('templatePath:', templatePath);
 	console.log('targetPath:', targetPath);
-
+	initializeRequiredFiles();
 	if (!fs.existsSync(templatePath)) {
 		console.error(`❌ ${name} 템플릿이 존재하지 않아요.`);
 		return;
