@@ -10,7 +10,7 @@ export async function addComponent(name: string) {
 	const templatePath = path.join(__dirname, '..', '..', 'templates', name);
 
 	// 사용자 프로젝트 내부 컴포넌트 경로 (명령어 실행 위치 기준)
-	const targetPath = path.join(process.cwd(), 'src/components', name);
+	const targetPath = path.join(process.cwd(), 'src/components/ui', name);
 
 	console.log('templatePath:', templatePath);
 	console.log('targetPath:', targetPath);
