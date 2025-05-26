@@ -35,5 +35,12 @@
 		"tiptap-extension-resize-image",
 		"zustand"
 	],
-	"components": ["select", "dialog", "popover", "scroll-area"]
+	"components": [
+		"select",
+		"dialog",
+		"popover",
+		"scroll-area",
+		"input",
+		"button"
+	]
 }
