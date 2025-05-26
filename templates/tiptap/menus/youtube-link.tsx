@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils';
 import { useVideoStore } from '../plugin';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Input } from '@/components/ui/input/input';
+import { Button } from '@/components/ui/button/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/popover';
 import { Editor } from '@tiptap/react';
 import { Video } from 'lucide-react';
 

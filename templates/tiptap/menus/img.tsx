@@ -1,4 +1,4 @@
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/popover';
 import { cn } from '@/lib/utils';
 import { ImagePlus } from 'lucide-react';
 import { IconButton } from './common/icon-button';

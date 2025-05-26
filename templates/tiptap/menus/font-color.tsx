@@ -1,4 +1,4 @@
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/popover';
 import { useFontConfigStore } from '../plugin';
 import { Colors } from '../plugin/tiptap-font-config/constants';
 import { cn } from '@/lib/utils';
