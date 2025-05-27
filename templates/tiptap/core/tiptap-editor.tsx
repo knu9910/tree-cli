@@ -25,10 +25,11 @@ import { TableContextMenu } from '../menus/table-context-menu';
 type Props = React.HTMLAttributes<HTMLElement> & {
   keyId: string;
   height?: number;
+  onImageUpload?: (file: File) => Promise<string>;
   content?: string;
 };
 
-export const TiptapEditor = ({ className, keyId, height = 400, content: initialContentProp }: Props) => {
+export const TiptapEditor = ({ className, keyId, height = 400, content: initialContentProp, onImageUpload }: Props) => {
   const { getContent, setContent } = useContentStore();
   const initialContent = initialContentProp ?? getContent(keyId);
 
@@ -109,7 +110,7 @@ export const TiptapEditor = ({ className, keyId, height = 400, content: initialC
 
   return (
     <div className={`${cn('border rounded-xl relative', className)}`}>
-      <Toolbar editor={editor} />
+      <Toolbar editor={editor} onImageUpload={onImageUpload} />
       <ScrollArea style={{ height: `${height}px` }}>
         <EditorContent
           editor={editor}

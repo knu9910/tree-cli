@@ -19,9 +19,10 @@ import { Editor } from '@tiptap/core';
 
 type Props = React.HTMLAttributes<HTMLElement> & {
   editor: Editor;
+  onImageUpload?: (file: File) => Promise<string>;
 };
 
-export const Toolbar = ({ className, editor }: Readonly<Props>) => (
+export const Toolbar = ({ className, editor, onImageUpload }: Readonly<Props>) => (
   <div className={cn('flex items-center py-1 px-4 border-b', className)}>
     <TipTapFontStyle editor={editor} />
     <Separator />
@@ -42,6 +43,6 @@ export const Toolbar = ({ className, editor }: Readonly<Props>) => (
     <TextAlignCenter editor={editor} />
     <TextAlignRight editor={editor} />
     <Separator />
-    <Img editor={editor} />
+    <Img editor={editor} onImageUpload={onImageUpload} />
   </div>
 );
