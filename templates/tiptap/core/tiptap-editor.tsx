@@ -74,37 +74,30 @@ export const TiptapEditor = ({ className, keyId, height = 400, content: initialC
   const didSetInitialContent = useRef(false);
   useEffect(() => {
     if (!editor) return;
+
+    // 초기값 설정 (최초 1회)
     if (initialContentProp !== undefined && !didSetInitialContent.current) {
       editor.commands.setContent(initialContentProp);
       setContent(keyId, initialContentProp);
       didSetInitialContent.current = true;
     }
-  }, [editor, initialContentProp, keyId, setContent]);
 
-  useEffect(() => {
-    if (initialContentProp !== undefined) {
-      setContent(keyId, initialContentProp);
+    // 스토어에서 복구
+    const saved = getContent(keyId);
+    if (saved && editor.getHTML() !== saved) {
+      editor.commands.setContent(saved);
     }
-  }, [initialContentProp, keyId, setContent]);
 
-  useEffect(() => {
-    if (!editor) return;
-    const initial = getContent(keyId);
-    if (initial && editor.getHTML() !== initial) {
-      editor.commands.setContent(initial);
-    }
-  }, [editor, keyId, getContent]);
-
-  useEffect(() => {
-    if (!editor) return;
+    // 실시간 저장 핸들러
     const handler = () => {
       setContent(keyId, editor.getHTML());
     };
     editor.on('update', handler);
+
     return () => {
       editor.off('update', handler);
     };
-  }, [editor, setContent, keyId]);
+  }, [editor, initialContentProp, keyId, setContent, getContent]);
 
   if (!editor) return null;
 
