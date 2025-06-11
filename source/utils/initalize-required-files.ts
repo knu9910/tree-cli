@@ -1,6 +1,5 @@
 import fs from 'fs-extra';
 import path from 'path';
-import {exists} from './exists.js';
 import {fileURLToPath} from 'url';
 
 /**
@@ -32,9 +31,9 @@ export async function initializeRequiredFiles() {
 	const utilsPath = path.join(process.cwd(), 'src/lib/utils.ts');
 
 	// src/lib/utils.ts 파일 초기화 로직
-	if (!exists(utilsPath)) {
+	if (!fs.existsSync(utilsPath)) {
 		// CLI 패키지의 templates/utils.ts가 존재하면 복사
-		if (exists(templatesUtilsPath)) {
+		if (fs.existsSync(templatesUtilsPath)) {
 			await fs.copy(templatesUtilsPath, utilsPath);
 			console.log(
 				'✅ CLI 패키지의 templates/utils.ts 파일을 src/lib/utils.ts로 복사했습니다.',
@@ -50,7 +49,7 @@ export async function initializeRequiredFiles() {
 	// src/components/ui 디렉토리 초기화
 	// shadcn/ui 컴포넌트들이 설치될 기본 위치
 	const uiDir = path.join(process.cwd(), 'src/components/ui');
-	if (!exists(uiDir)) {
+	if (!fs.existsSync(uiDir)) {
 		await fs.ensureDir(uiDir);
 		console.log('✅ src/components/ui 폴더가 생성되었습니다.');
 	}

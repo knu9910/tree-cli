@@ -7,7 +7,6 @@ import {initializeRequiredFiles} from './initalize-required-files.js';
 /**
  * tree-cli의 핵심 기능: 컴포넌트를 사용자 프로젝트에 추가하는 함수
  *
- * 이 함수는 shadcn/ui의 `npx shadcn-ui@latest add button` 방식을 모방하여
  * CLI 패키지에 포함된 템플릿 컴포넌트를 사용자 프로젝트로 복사하고,
  * 필요한 의존성 패키지들을 자동으로 설치합니다.
  *
