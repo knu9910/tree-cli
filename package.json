@@ -1,6 +1,6 @@
 {
 	"name": "@knu9910/tree-cli",
-	"version": "0.0.11",
+	"version": "0.0.12",
 	"license": "MIT",
 	"bin": {
 		"knu-tree-cli": "dist/cli.js"
