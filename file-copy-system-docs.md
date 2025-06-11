@@ -97,7 +97,7 @@ export async function initializeRequiredFiles() {
 	}
 
 	// UI 디렉토리 생성
-	const uiDir = path.join(process.cwd(), 'src/components/ui');
+	const uiDir = path.join(process.cwd(), 'src/components/custom-ui');
 	if (!exists(uiDir)) {
 		await fs.ensureDir(uiDir);
 	}

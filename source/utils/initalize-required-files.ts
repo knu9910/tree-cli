@@ -7,7 +7,7 @@ import {fileURLToPath} from 'url';
  *
  * 이 함수는 사용자의 프로젝트에 다음과 같은 필수 요소들을 자동으로 생성합니다:
  * 1. src/lib/utils.ts - Tailwind CSS 클래스 병합 등의 유틸리티 함수들
- * 2. src/components/ui - UI 컴포넌트들이 저장될 디렉토리
+ * 2. src/components/custom-ui - UI 컴포넌트들이 저장될 디렉토리
  *
  * shadcn/ui와 유사한 구조를 따라서 일관성 있는 프로젝트 구조를 제공합니다.
  */
@@ -46,11 +46,11 @@ export async function initializeRequiredFiles() {
 		}
 	}
 
-	// src/components/ui 디렉토리 초기화
+	// src/components/custom-ui 디렉토리 초기화
 	// shadcn/ui 컴포넌트들이 설치될 기본 위치
-	const uiDir = path.join(process.cwd(), 'src/components/ui');
+	const uiDir = path.join(process.cwd(), 'src/components/custom-ui');
 	if (!fs.existsSync(uiDir)) {
 		await fs.ensureDir(uiDir);
-		console.log('✅ src/components/ui 폴더가 생성되었습니다.');
+		console.log('✅ src/components/custom-ui 폴더가 생성되었습니다.');
 	}
 }

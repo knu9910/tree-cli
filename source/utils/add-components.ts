@@ -11,7 +11,7 @@ import {initializeRequiredFiles} from './initalize-required-files.js';
  * 필요한 의존성 패키지들을 자동으로 설치합니다.
  *
  * 작업 흐름:
- * 1. 필수 파일/디렉토리 초기화 (src/lib/utils.ts, src/components/ui 등)
+ * 1. 필수 파일/디렉토리 초기화 (src/lib/utils.ts, src/components/custom-ui 등)
  * 2. CLI 패키지의 templates/{컴포넌트명} 디렉토리를 사용자 프로젝트로 복사
  * 3. dependencies.json 파일이 있으면 필요한 패키지들 설치
  * 4. 의존성 컴포넌트가 있으면 재귀적으로 추가
