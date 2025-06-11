@@ -21,6 +21,7 @@ import { cn } from '@/lib/utils';
 import { Toolbar } from './toolbar';
 import { ScrollArea } from '../../scroll-area/scroll-area';
 import { TableContextMenu } from '../menus/table-context-menu';
+import { FontOptions } from '../plugin/tiptap-font-config/constants';
 
 type Props = React.HTMLAttributes<HTMLElement> & {
   keyId: string;
@@ -69,6 +70,11 @@ export const TiptapEditor = ({ className, keyId, height = 400, content: initialC
       },
     },
     immediatelyRender: false,
+    onCreate: ({ editor }) => {
+      // 에디터 생성 시 기본 폰트 크기와 폰트 설정
+      editor.chain().selectAll().setFontSize('18px').setFontFamily(FontOptions['맑은 고딕']).run();
+      editor.commands.blur();
+    },
   });
 
   const didSetInitialContent = useRef(false);

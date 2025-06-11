@@ -12,13 +12,20 @@ type Props = React.HTMLAttributes<HTMLElement> & {
 };
 
 export const TipTapFontSize = ({ className, editor }: Readonly<Props>) => {
-  const [currentFontSize, setCurrentFontSize] = useState<string>('12px');
+  const [currentFontSize, setCurrentFontSize] = useState<string>('18px');
 
   const getCurrentFontSize = useCallback(() => {
-    if (!editor) return '12px';
+    if (!editor) return '18px';
 
     const fontSize = editor.getAttributes('textStyle').fontSize;
-    return fontSize || '12px';
+
+    // fontSize가 있고 Pxs enum에 포함된 값인지 확인
+    if (fontSize && Object.values(Pxs).includes(fontSize as Pxs)) {
+      return fontSize;
+    }
+
+    // 기본값 반환
+    return '18px';
   }, [editor]);
 
   useEffect(() => {

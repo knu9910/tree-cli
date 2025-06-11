@@ -19,8 +19,21 @@ export const TipTapFontStyle = ({ className, editor }: Readonly<Props>) => {
 
     const fontFamily = editor.getAttributes('textStyle').fontFamily;
 
+    if (!fontFamily) return '맑은 고딕';
+
     // FontOptions에서 현재 fontFamily와 일치하는 키를 찾기
-    const fontKey = Object.keys(FontOptions).find((key) => FontOptions[key] === fontFamily);
+    const fontKey = Object.keys(FontOptions).find((key) => {
+      const optionValue = FontOptions[key];
+
+      // 정확히 일치하는 경우
+      if (optionValue === fontFamily) return true;
+
+      // 첫 번째 폰트명만 비교 (예: "Malgun Gothic, sans-serif"에서 "Malgun Gothic"만)
+      const firstFont = optionValue.split(',')[0].trim().replace(/['"]/g, '');
+      const currentFirstFont = fontFamily.split(',')[0].trim().replace(/['"]/g, '');
+
+      return firstFont === currentFirstFont;
+    });
 
     return fontKey || '맑은 고딕';
   }, [editor]);

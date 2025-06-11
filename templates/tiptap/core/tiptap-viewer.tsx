@@ -19,6 +19,7 @@ import TableRow from '@tiptap/extension-table-row';
 import TableHeader from '@tiptap/extension-table-header';
 import TableCell from '@tiptap/extension-table-cell';
 import { useContentStore } from '../plugin';
+import { FontOptions } from '../plugin/tiptap-font-config/constants';
 
 type Props = {
   className?: string;
@@ -63,6 +64,12 @@ export const TiptapViewer = ({ className, keyId, content: propsContent }: Props)
     content: finalContent,
     editable: false,
     immediatelyRender: false,
+    onCreate: ({ editor }) => {
+      // 에디터 생성 시 기본 폰트 크기와 폰트 설정
+      if (!finalContent || finalContent === '') {
+        editor.chain().selectAll().setFontSize('18px').setFontFamily(FontOptions['맑은 고딕']).run();
+      }
+    },
   });
 
   useEffect(() => {
