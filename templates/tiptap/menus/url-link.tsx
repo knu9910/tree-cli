@@ -3,9 +3,9 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from '@/components/custom-ui/popover';
-import {Input} from '@/components/custom-ui/input';
-import {Button} from '@/components/custom-ui/button';
+} from '@/components/custom-ui/popover/popover';
+import {Input} from '@/components/custom-ui/input/input';
+import {Button} from '@/components/custom-ui/button/button';
 import {cn} from '@/lib/utils';
 import {Link} from 'lucide-react';
 import {IconButton} from './common/icon-button';
