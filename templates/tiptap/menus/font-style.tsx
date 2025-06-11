@@ -5,21 +5,55 @@ import { Type } from 'lucide-react';
 import { IconButtonWrapper } from './common/icon-button-wrapper';
 import { IconButton } from './common/icon-button';
 import { Editor } from '@tiptap/react';
+import { useCallback, useEffect, useState } from 'react';
 
 type Props = React.HTMLAttributes<HTMLElement> & {
   editor: Editor;
 };
 
 export const TipTapFontStyle = ({ className, editor }: Readonly<Props>) => {
+  const [currentFont, setCurrentFont] = useState<string>('맑은 고딕');
+
+  const getCurrentFont = useCallback(() => {
+    if (!editor) return '맑은 고딕';
+
+    const fontFamily = editor.getAttributes('textStyle').fontFamily;
+
+    // FontOptions에서 현재 fontFamily와 일치하는 키를 찾기
+    const fontKey = Object.keys(FontOptions).find((key) => FontOptions[key] === fontFamily);
+
+    return fontKey || '맑은 고딕';
+  }, [editor]);
+
+  useEffect(() => {
+    if (!editor) return;
+
+    const updateFont = () => {
+      setCurrentFont(getCurrentFont());
+    };
+
+    // 에디터 업데이트 시 현재 폰트 업데이트
+    editor.on('selectionUpdate', updateFont);
+    editor.on('transaction', updateFont);
+
+    // 초기 폰트 설정
+    updateFont();
+
+    return () => {
+      editor.off('selectionUpdate', updateFont);
+      editor.off('transaction', updateFont);
+    };
+  }, [editor, getCurrentFont]);
+
   const changeFont = (font: string) => {
     // 폰트 변경 적용
-    editor.chain().setFontFamily(FontOptions[font]).run();
+    editor.chain().focus().setFontFamily(FontOptions[font]).run();
   };
 
   return (
     <div className={cn('', className)}>
       {/* 폰트 설정 메뉴 */}
-      <Select onValueChange={changeFont}>
+      <Select value={currentFont} onValueChange={changeFont}>
         <SelectTrigger
           className={cn(
             'group w-fit mr-2 border-none shadow-none focus:outline-none focus:ring-0 px-2 flex items-center gap-1.5 rounded-md border border-gray-200 bg-white hover:bg-gray-100 transition-colors cursor-pointer',
@@ -31,7 +65,7 @@ export const TipTapFontStyle = ({ className, editor }: Readonly<Props>) => {
               <Type className="" />
             </IconButton>
           </IconButtonWrapper>
-          <SelectValue placeholder="맑은고딕" className="text-sm text-gray-700 " />
+          <SelectValue placeholder={currentFont} className="text-sm text-gray-700 " />
         </SelectTrigger>
         <SelectContent className="rounded-md shadow-lg bg-white border border-gray-300 mt-1">
           {Object.keys(FontOptions).map((fontName) => (
