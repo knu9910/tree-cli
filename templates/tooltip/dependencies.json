@@ -1,0 +1,16 @@
+{
+	"packages": [
+		"react",
+		"clsx",
+		"class-variance-authority",
+		"clsx",
+		"lucide-react",
+		"next",
+		"react-dom",
+		"tailwind-merge",
+		"tailwindcss-animate",
+		"zustand",
+		"@radix-ui/react-tooltip"
+	],
+	"components": []
+}

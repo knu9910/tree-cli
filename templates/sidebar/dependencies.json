@@ -1,0 +1,19 @@
+{
+	"packages": [
+		"react",
+		"clsx",
+		"class-variance-authority",
+		"lucide-react",
+		"@radix-ui/react-slot",
+		"next"
+	],
+	"components": [
+		"button",
+		"input",
+		"accordion",
+		"sheet",
+		"skeleton",
+		"tooltip"
+	],
+	"hooks": ["use-mobile"]
+}
