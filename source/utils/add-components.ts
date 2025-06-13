@@ -22,48 +22,104 @@ import {initializeRequiredFiles} from './initalize-required-files.js';
 // ES 모듈에서 __dirname 대체 (현재 파일의 디렉토리 경로)
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export async function addComponent(name: string) {
-	// CLI 패키지 내부의 템플릿 경로
-	// 예: /node_modules/@knu9910/tree-cli/templates/tiptap
-	const templatePath = path.join(__dirname, '..', '..', 'templates', name);
+// 스타일 처리를 위한 유틸리티 함수
+async function updateGlobalStyles(styles: any) {
+	const globalCssPath = path.join(process.cwd(), 'src/app/globals.css');
 
-	// 사용자 프로젝트에서 컴포넌트가 복사될 목적지 경로
-	// 예: /Users/user/my-project/src/components/custom-ui/tiptap
+	// globals.css 파일이 없으면 생성
+	if (!fs.existsSync(globalCssPath)) {
+		await fs.ensureFile(globalCssPath);
+		await fs.writeFile(globalCssPath, '');
+	}
+
+	let content = await fs.readFile(globalCssPath, 'utf8');
+
+	// @theme inline 블록이 있는지 확인
+	const themeBlockRegex = /@theme\s+inline\s*{[\s\S]*?}/;
+	const hasThemeBlock = themeBlockRegex.test(content);
+
+	if (!hasThemeBlock) {
+		// @theme inline 블록이 없으면 새로 생성
+		content += '\n\n@theme inline {\n';
+
+		// theme 변수들 추가
+		if (styles.theme) {
+			Object.entries(styles.theme).forEach(([key, value]) => {
+				content += `  ${key}: ${value};\n`;
+			});
+		}
+
+		// animations 변수들 추가
+		if (styles.animations) {
+			Object.entries(styles.animations).forEach(([key, value]) => {
+				content += `  ${key}: ${value};\n`;
+			});
+		}
+
+		content += '}\n';
+	} else {
+		// 기존 @theme inline 블록 내부에 변수들 추가
+		content = content.replace(themeBlockRegex, match => {
+			let newBlock = match.slice(0, -1); // 마지막 } 제거
+
+			// theme 변수들 추가
+			if (styles.theme) {
+				Object.entries(styles.theme).forEach(([key, value]) => {
+					if (!match.includes(key)) {
+						newBlock += `  ${key}: ${value};\n`;
+					}
+				});
+			}
+
+			// animations 변수들 추가
+			if (styles.animations) {
+				Object.entries(styles.animations).forEach(([key, value]) => {
+					if (!match.includes(key)) {
+						newBlock += `  ${key}: ${value};\n`;
+					}
+				});
+			}
+
+			return newBlock + '}';
+		});
+	}
+
+	await fs.writeFile(globalCssPath, content);
+}
+
+export async function addComponent(name: string) {
+	const templatePath = path.join(__dirname, '..', '..', 'templates', name);
 	const targetPath = path.join(process.cwd(), 'src/components/custom-ui', name);
 
-	// 디버깅을 위한 경로 출력
 	console.log('templatePath:', templatePath);
 	console.log('targetPath:', targetPath);
 
-	// 프로젝트 초기화 (필수 파일/디렉토리 생성)
 	initializeRequiredFiles();
 
-	// 요청된 템플릿이 CLI 패키지에 존재하는지 확인
 	if (!fs.existsSync(templatePath)) {
 		console.error(`❌ ${name} 템플릿이 존재하지 않아요.`);
 		return;
 	}
 
-	// 목적지 디렉토리 생성 (중간 디렉토리들도 자동 생성)
 	await fs.ensureDir(targetPath);
-
-	// 템플릿 디렉토리 전체를 사용자 프로젝트로 복사
-	// 모든 하위 파일과 디렉토리가 재귀적으로 복사됨
 	await fs.copy(templatePath, targetPath);
 
 	console.log(`✅ ${name} 컴포넌트가 성공적으로 추가되었습니다.`);
 
-	// 의존성 처리: dependencies.json 파일 확인 및 처리
 	const depsPath = path.join(templatePath, 'dependencies.json');
 	if (fs.existsSync(depsPath)) {
 		const depsJson = await fs.readJson(depsPath);
 
-		// npm 패키지 의존성 설치
 		if (Array.isArray(depsJson.packages) && depsJson.packages.length > 0) {
 			await installDeps(depsJson.packages);
 		}
 
-		// hooks 의존성 처리
+		// 스타일 처리
+		if (depsJson.styles) {
+			await updateGlobalStyles(depsJson.styles);
+			console.log('✅ globals.css에 스타일이 추가되었습니다.');
+		}
+
 		if (Array.isArray(depsJson.hooks) && depsJson.hooks.length > 0) {
 			const hooksDir = path.join(process.cwd(), 'src/hooks');
 			await fs.ensureDir(hooksDir);
@@ -87,11 +143,9 @@ export async function addComponent(name: string) {
 			}
 		}
 
-		// 컴포넌트 의존성 재귀적 설치
-		// 예: tiptap 컴포넌트가 button, dialog 컴포넌트를 필요로 하는 경우
 		if (Array.isArray(depsJson.components) && depsJson.components.length > 0) {
 			for (const depComp of depsJson.components) {
-				await addComponent(depComp); // 재귀 호출
+				await addComponent(depComp);
 			}
 		}
 	}
