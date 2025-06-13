@@ -1,0 +1,13 @@
+{
+	"packages": [
+		"react",
+		"clsx",
+		"class-variance-authority",
+		"lucide-react",
+		"next",
+		"react-dom",
+		"tailwind-merge",
+		"tailwindcss-animate"
+	],
+	"components": []
+}

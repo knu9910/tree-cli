@@ -1,0 +1,14 @@
+{
+	"packages": [
+		"react",
+		"clsx",
+		"class-variance-authority",
+		"@radix-ui/react-scroll-area",
+		"lucide-react",
+		"next",
+		"react-dom",
+		"tailwind-merge",
+		"tailwindcss-animate"
+	],
+	"components": []
+}
