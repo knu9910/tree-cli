@@ -63,6 +63,30 @@ export async function addComponent(name: string) {
 			await installDeps(depsJson.packages);
 		}
 
+		// hooks 의존성 처리
+		if (Array.isArray(depsJson.hooks) && depsJson.hooks.length > 0) {
+			const hooksDir = path.join(process.cwd(), 'src/hooks');
+			await fs.ensureDir(hooksDir);
+
+			for (const hook of depsJson.hooks) {
+				const hookTemplatePath = path.join(
+					__dirname,
+					'..',
+					'..',
+					'templates/hooks',
+					`${hook}.ts`,
+				);
+				const hookTargetPath = path.join(hooksDir, `${hook}.ts`);
+
+				if (fs.existsSync(hookTemplatePath)) {
+					await fs.copy(hookTemplatePath, hookTargetPath);
+					console.log(`✅ ${hook} hook이 성공적으로 추가되었습니다.`);
+				} else {
+					console.error(`❌ ${hook} hook 템플릿이 존재하지 않아요.`);
+				}
+			}
+		}
+
 		// 컴포넌트 의존성 재귀적 설치
 		// 예: tiptap 컴포넌트가 button, dialog 컴포넌트를 필요로 하는 경우
 		if (Array.isArray(depsJson.components) && depsJson.components.length > 0) {
