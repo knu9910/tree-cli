@@ -13,7 +13,8 @@
 		"accordion",
 		"sheet",
 		"skeleton",
-		"tooltip"
+		"tooltip",
+		"separator"
 	],
 	"hooks": ["use-mobile"]
 }
