@@ -1,12 +1,12 @@
 import React from 'react';
-import {Counter} from './components/counter.js';
+import {TemplateSelector} from './components/template-selector.js';
 
 type Props = {};
 
 export default function App({}: Props) {
 	return (
 		<>
-			<Counter />
+			<TemplateSelector />
 		</>
 	);
 }
