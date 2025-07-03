@@ -62,20 +62,34 @@ async function updateGlobalStyles(styles: any) {
 		content = content.replace(themeBlockRegex, match => {
 			let newBlock = match.slice(0, -1); // 마지막 } 제거
 
-			// theme 변수들 추가
+			// 기존 CSS 변수들을 정확히 파싱
+			const existingVarsRegex = /--[\w-]+\s*:\s*[^;]+;/g;
+			const existingVars = match.match(existingVarsRegex) || [];
+			const existingKeys = existingVars
+				.map(varDeclaration => {
+					const keyMatch = varDeclaration.match(/^(--[\w-]+)\s*:/);
+					return keyMatch ? keyMatch[1] : null;
+				})
+				.filter(Boolean);
+
+			// theme 변수들 추가 (중복 체크)
 			if (styles.theme) {
 				Object.entries(styles.theme).forEach(([key, value]) => {
-					if (!match.includes(key)) {
+					if (!existingKeys.includes(key)) {
 						newBlock += `  ${key}: ${value};\n`;
+					} else {
+						console.log(`⚠️ CSS 변수 ${key}가 이미 존재합니다. 건너뜁니다.`);
 					}
 				});
 			}
 
-			// animations 변수들 추가
+			// animations 변수들 추가 (중복 체크)
 			if (styles.animations) {
 				Object.entries(styles.animations).forEach(([key, value]) => {
-					if (!match.includes(key)) {
+					if (!existingKeys.includes(key)) {
 						newBlock += `  ${key}: ${value};\n`;
+					} else {
+						console.log(`⚠️ CSS 변수 ${key}가 이미 존재합니다. 건너뜁니다.`);
 					}
 				});
 			}
