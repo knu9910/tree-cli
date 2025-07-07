@@ -130,7 +130,7 @@ export const Toolbar = ({ className, editor, onImageUpload }: Readonly<Props>) =
 
       {/* 모바일/태블릿: 그룹별 접기/펴기 레이아웃 (lg 미만) */}
       <div className="lg:hidden p-2">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {/* 폰트 스타일 그룹: 항상 표시 */}
           <TipTapFontStyle editor={editor} />
           <TipTapFontSize editor={editor} />
