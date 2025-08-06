@@ -9,7 +9,8 @@ export type YouTubeVideoOptions = {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     youtubeVideo: {
-      setYouTubeVideo: (src: string) => ReturnType;
+      setYouTubeVideo: (src: string, width?: string, height?: string) => ReturnType;
+      setYouTubeVideoSize: (width: string, height: string) => ReturnType;
     };
   }
 }
@@ -26,6 +27,12 @@ export const YouTubeVideo = Node.create<YouTubeVideoOptions>({
       src: {
         default: null,
       },
+      width: {
+        default: '560',
+      },
+      height: {
+        default: '315',
+      },
     };
   },
 
@@ -41,8 +48,6 @@ export const YouTubeVideo = Node.create<YouTubeVideoOptions>({
     return [
       'iframe',
       mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-        width: '200',
-        height: '100',
         frameborder: '0',
         allowfullscreen: 'true',
       }),
@@ -52,7 +57,7 @@ export const YouTubeVideo = Node.create<YouTubeVideoOptions>({
   addCommands() {
     return {
       setYouTubeVideo:
-        (src) =>
+        (src, width = '560', height = '315') =>
         ({ chain }) => {
           const videoId = src.split('v=')[1]?.split('&')[0];
           if (videoId) {
@@ -60,11 +65,16 @@ export const YouTubeVideo = Node.create<YouTubeVideoOptions>({
             return chain()
               .insertContent({
                 type: this.name,
-                attrs: { src: embedUrl },
+                attrs: { src: embedUrl, width, height },
               })
               .run();
           }
           return false;
+        },
+      setYouTubeVideoSize:
+        (width, height) =>
+        ({ chain }) => {
+          return chain().updateAttributes(this.name, { width, height }).run();
         },
     };
   },
